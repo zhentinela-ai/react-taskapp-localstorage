@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { TaskCreator } from "./components/TaskCreator";
 
 function App() {
-  const [taskItems, setTaskItems] = useState([
-    { name: "mi primer tarea", done: false },
-    { name: "mi segunda tarea", done: false },
-    { name: "mi tercera tarea", done: false },
-  ]);
+  const [tasksItems, setTasksItems] = useState([]);
 
   function createNewTask(taskName) {
-    if (!taskItems.find((task) => task.name === taskName)) {
-      setTaskItems([...taskItems, { name: taskName, done: false }]);
+    if (!tasksItems.find((task) => task.name === taskName)) {
+      setTasksItems([...tasksItems, { name: taskName, done: false }]);
     }
   }
+
+  useEffect(() => {
+    let data = localStorage.getItem('tasks')
+    if (data) {
+      setTasksItems(JSON.parse(data))
+    }
+  }, [])
+  
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasksItems))
+  }, [tasksItems]);
 
   return (
     <div className="App">
@@ -26,7 +34,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {taskItems.map((task) => (
+          {tasksItems.map((task) => (
             <tr key={task.name}>
               <td>{task.name}</td>
             </tr>
