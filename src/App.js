@@ -4,12 +4,8 @@ import { TaskCreator } from "./components/TaskCreator";
 import { TaskTable } from "./components/TaskTable";
 
 function App() {
-  const [tasksItems, setTasksItems] = useState([
-    {
-      name: "task 1",
-      done: true,
-    },
-  ]);
+  const [tasksItems, setTasksItems] = useState([]);
+  const [showCompleted, setShowCompleted] = useState(false);
 
   function createNewTask(taskName) {
     if (!tasksItems.find((task) => task.name === taskName)) {
@@ -40,6 +36,24 @@ function App() {
     <div className="App">
       <TaskCreator createNewTask={createNewTask} />
       <TaskTable tasks={tasksItems} toggleTask={toggleTask} />
+
+      <div className="">
+        <input
+          type="checkbox"
+          onChange={(e) => {
+            setShowCompleted(!showCompleted);
+          }}
+        />
+        <label>Show Tasks Done</label>
+      </div>
+
+      {showCompleted === true && (
+        <TaskTable
+          tasks={tasksItems}
+          toggleTask={toggleTask}
+          showCompleted={showCompleted}
+        />
+      )}
     </div>
   );
 }
